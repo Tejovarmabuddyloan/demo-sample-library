@@ -1,47 +1,48 @@
 package com.example.groovy
 
+import android.content.Context
+import android.graphics.Color
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import android.os.Bundle
+import android.view.Gravity
+import android.widget.Button
+import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import com.example.groovy.ui.theme.GroovyTheme
-import com.example.library.Sydney
+import com.example.library.Myclass
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContent {
-            GroovyTheme {
-                // A surface container using the 'background' color from the theme
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
-                ) {
-                    Greeting(Sydney.suburbs[1]) // Use Sydney object here
-                }
+
+        val layout = LinearLayout(this).apply {
+            setBackgroundColor(Color.WHITE)
+            gravity = Gravity.CENTER
+            orientation = LinearLayout.VERTICAL
+        }
+
+        val textView = TextView(this).apply {
+            text = "Initial Text"
+            gravity = Gravity.CENTER
+            textSize = 20f
+        }
+
+        val button = Button(this).apply {
+            text = "Click Me"
+            setBackgroundColor(Color.BLUE)
+            setTextColor(Color.WHITE)
+            setOnClickListener {
+                val myClassInstance = Myclass(this@MainActivity)
+                myClassInstance.whistleLoopEvents("eventName", "extraParameters")
             }
         }
-    }
-}
-
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    GroovyTheme {
-        Greeting("Android")
+        layout.addView(textView)
+        layout.addView(button)
+        setContentView(layout)
     }
 }
